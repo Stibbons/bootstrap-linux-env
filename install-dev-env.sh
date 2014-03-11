@@ -86,7 +86,12 @@ chsh -s /bin/zsh
 
     if [[ ! -d .git ]]; then
         git clone https://Stibbons@github.com/Stibbons/guake.git .
+        ./autogen.sh
+        make
+        sudo make install
     else
         git fetch --all
     fi
 )
+
+echo "Please Reboot"

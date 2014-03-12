@@ -167,7 +167,27 @@ echo "Installing guake..."
 (
     echo
     echo "Installing python tools..."
-    sudo apt-get install -y pylint pyflakes pep8 python-autopep8 || exit 1
+    sudo apt-get install -y pyflakes || exit 1
+    sudo apt-get install -y extract || exit 1
+
+    echo
+    echo "Installing pip tools..."
+    sudo pip install percol || exit 1
+    sudo pip install grin || exit 1
+    sudo pip install simplejson || exit 1
+    sudo pip install pylint || exit 1
+    sudo pip install Twisted || exit 1
+    sudo pip install Mock || exit 1
+    sudo pip install simplejson || exit 1
+    sudo pip install pyyaml || exit 1
+    sudo pip install dictns || exit 1
+    sudo pip install Sphinx || exit 1
+    sudo pip install epydoc || exit 1
+    sudo pip install coverage || exit 1
+    sudo pip install pylint || exit 1
+    sudo pip install ipdb || exit 1
+    sudo pip install pep8 || exit 1
+    sudo pip install autopep8 || exit 1
 )
 
 echo

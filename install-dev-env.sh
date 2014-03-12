@@ -1,13 +1,19 @@
 #!/bin/bash
 
-echo "Please type your password"
+echo "Automated installation of a new Development environment"
+echo
+echo "Info:"
+cat /etc/lsb-release
+
+echo "Please type your 'sudo' password:"
 sudo /bin/true
 
+echo "apt..."
 sudo apt-get install -y vim gedit || exit 1
 sudo apt-get install -y git git-gui gitk tig || exit 1
 sudo apt-get install -y git chromium-browser || exit 1
 
-echo Installing sublime
+echo "Installing sublime"
 which subl
 if [[ $? == 1 ]]; then
     (
@@ -18,6 +24,7 @@ if [[ $? == 1 ]]; then
     )
 fi
 
+echo "Retrieving my sublime configuration..."
 cd $HOME
 (
     mkdir -p .config/sublime-text-3/Packages/User
@@ -31,15 +38,16 @@ cd $HOME
     fi
 )
 
+echo "Retrieving my sublime configuration..."
 (
     source /etc/lsb-release
 
-    exit 0
+    exit 0 # this just leave the current '(...)' block
 
     if [[ DISTRIB_DESCRIPTION == "Ubuntu 13.10" ]]; then
         sudo apt-get install -y build-essential fakeroot dpkg-dev
-        mkdir ~/Projects/python-pycurl-openssl
-        cd ~/Projects/python-pycurl-openssl
+        mkdir $HOME/Projects/python-pycurl-openssl
+        cd $HOME/Projects/python-pycurl-openssl
         sudo apt-get source -y python-pycurl
         sudo apt-get build-dep -y python-pycurl
         sudo apt-get install -y libcurl4-openssl-dev
@@ -59,23 +67,38 @@ cd $HOME
     fi
 )
 
+echo "Installing oh-my-zsh..."
 (
     mkdir -p Projects/oh-my-zsh
     cd Projects/oh-my-zsh
     if [[ ! -d .git ]]; then
         git clone https://Stibbons@github.com/Stibbons/oh-my-zsh.git .
+
     else
         git fetch --all
     fi
-    ln -sf $HOME?.oh-my-zsh $HOME/Projects/oh-my-zsh
-    ln -sf Projects/oh-my-zsh/dot_files/gitconfig ~/.gitconfig
-    ln -sf ~/Projects/oh-my-zsh/templates/zshrc-linux.zsh ~/.zshrc
+    git remote add bchretien       https://github.com/bchretien/oh-my-zsh.git
+    git remote add bors-ltd        https://github.com/bors-ltd/oh-my-zsh.git
+    git remote add cadusk          https://github.com/cadusk/oh-my-zsh.git
+    git remote add dlintw          https://github.com/dlintw/oh-my-zsh.git
+    git remote add jeroenjanssens  https://github.com/jeroenjanssens/oh-my-zsh.git
+    git remote add kipanshi        https://github.com/kipanshi/oh-my-zsh.git
+    git remote add origin          https://Stibbons@github.com/Stibbons/oh-my-zsh.git
+    git remote add sjl             https://github.com/sjl/oh-my-zsh.git
+    git remote add styx            https://github.com/styx/oh-my-zsh.git
+    git remote add upstream        https://github.com/robbyrussell/oh-my-zsh.git
+    git remote add ysmood          https://github.com/ysmood/oh-my-zsh.git
+    ln -sf $HOME/Projects/oh-my-zsh $HOME/.oh-my-zsh
+    ln -sf Projects/oh-my-zsh/dot_files/gitconfig $HOME/.gitconfig
+    ln -sf $HOME/Projects/oh-my-zsh/templates/zshrc-linux.zsh $HOME/.zshrc
 )
 
+echo "Installing zsh"
 sudo apt-get install -y zsh-beta || exit 1
 # password asked here
 chsh -s /bin/zsh
 
+echo "Installing guake..."
 (
     mkdir -p Projects/guake
     cd Projects/guake
@@ -83,6 +106,7 @@ chsh -s /bin/zsh
     sudo apt-get install -y gnome-common gtk-doc-tools libglib2.0-dev libgtk2.0-dev libgconf2-dev
     sudo apt-get install -y python-gtk2 python-gtk2-dev python-vte python-appindicator
     sudo apt-get install -y python3-dev python-pip
+    sudo apt-get install -y glade-gtk2
 
     if [[ ! -d .git ]]; then
         git clone https://Stibbons@github.com/Stibbons/guake.git .
@@ -92,6 +116,7 @@ chsh -s /bin/zsh
     else
         git fetch --all
     fi
+    git remote add upstream https://Stibbons@github.com/Guake/guake.git
 )
 
 echo "Please Reboot"

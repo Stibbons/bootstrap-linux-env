@@ -23,10 +23,56 @@ sudo apt-get update -y || exit 1
 sudo apt-get upgrade -y || exit 1
 
 echo
-echo "Some apt..."
+echo "Installing some tools..."
 sudo apt-get install -y vim gedit || exit 1
 sudo apt-get install -y git git-gui gitk tig || exit 1
 sudo apt-get install -y git chromium-browser || exit 1
+
+(
+    source /etc/lsb-release
+
+    exit 0 # this just leave the current '(...)' block
+
+    # Work around GNUTLS bug in Ubuntu 13.10
+    if [[ DISTRIB_DESCRIPTION == "Ubuntu 13.10" ]]; then
+        echo
+        echo "Patching to work around bug in GNUTLS handshake..."
+        echo "See: http://stackoverflow.com/questions/13524242/error-gnutls-handshake-failed-git-repository"
+        sudo apt-get install -y build-essential fakeroot dpkg-dev
+        mkdir $PROJECT_DIR/python-pycurl-openssl
+        cd $PROJECT_DIR/python-pycurl-openssl
+        sudo apt-get source -y python-pycurl
+        sudo apt-get build-dep -y python-pycurl
+        sudo apt-get install -y libcurl4-openssl-dev
+        sudo dpkg-source -x pycurl_7.19.0-4ubuntu3.dsc
+        cd pycurl-7.19.0
+        chmod a+rw debian/patches/10_setup.py.patch setup.py debian/control
+        # remove the HAVE_CURL_GNUTLS=1 in debian/patches/10_setup.py.patch
+        sudo sed -i "s/('HAVE_CURL_GNUTLS', 1)//g" debian/patches/10_setup.py.patch
+
+        # remove the HAVE_CURL_GNUTLS=1 in the following file
+        sudo sed -i "s/('HAVE_CURL_GNUTLS', 1)//g" setup.py
+
+        # replace all gnutls into openssl in the following file
+        sudo sed -i 's/gnutls/openssl/g' debian/control
+        sudo dpkg-buildpackage -rfakeroot -b
+        sudo dpkg -i ../python-pycurl_7.19.0-*ubuntu8_amd64.deb
+    fi
+)
+
+echo
+echo "Retrieving bootstrap as a project to futur updates..."
+(
+    mkdir -p $PROJECT_DIR/bootstrap-linx-env
+    cd $PROJECT_DIR/bootstrap-linx-env
+    if [[ ! -d .git ]]; then
+        git clone https://Stibbons@github.com/Stibbons/bootstrap-linx-env.git .
+
+    else
+        echo "Updating..."
+        git fetch --all
+    fi
+)
 
 echo
 echo "Installing sublime"
@@ -54,38 +100,6 @@ cd $HOME
     else
         echo "Updating..."
         git fetch --all
-    fi
-)
-
-echo
-echo "Retrieving my sublime configuration..."
-(
-    source /etc/lsb-release
-
-    exit 0 # this just leave the current '(...)' block
-
-    # Work around GNUTLS bug in Ubuntu 13.10
-    # http://stackoverflow.com/questions/13524242/error-gnutls-handshake-failed-git-repository
-    if [[ DISTRIB_DESCRIPTION == "Ubuntu 13.10" ]]; then
-        sudo apt-get install -y build-essential fakeroot dpkg-dev
-        mkdir $PROJECT_DIR/python-pycurl-openssl
-        cd $PROJECT_DIR/python-pycurl-openssl
-        sudo apt-get source -y python-pycurl
-        sudo apt-get build-dep -y python-pycurl
-        sudo apt-get install -y libcurl4-openssl-dev
-        sudo dpkg-source -x pycurl_7.19.0-4ubuntu3.dsc
-        cd pycurl-7.19.0
-        chmod a+rw debian/patches/10_setup.py.patch setup.py debian/control
-        # remove the HAVE_CURL_GNUTLS=1 in debian/patches/10_setup.py.patch
-        sudo sed -i "s/('HAVE_CURL_GNUTLS', 1)//g" debian/patches/10_setup.py.patch
-
-        # remove the HAVE_CURL_GNUTLS=1 in the following file
-        sudo sed -i "s/('HAVE_CURL_GNUTLS', 1)//g" setup.py
-
-        # replace all gnutls into openssl in the following file
-        sudo sed -i 's/gnutls/openssl/g' debian/control
-        sudo dpkg-buildpackage -rfakeroot -b
-        sudo dpkg -i ../python-pycurl_7.19.0-*ubuntu8_amd64.deb
     fi
 )
 

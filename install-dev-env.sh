@@ -163,6 +163,13 @@ echo "Installing guake..."
     git remote add upstream https://Stibbons@github.com/Guake/guake.git
 )
 
+
+(
+    echo
+    echo "Installing python tools..."
+    sudo apt-get install -y pylint pyflakes pep8 python-autopep8 || exit 1
+)
+
 echo
 echo "Environment successfully installed or updated."
 echo "Please Reboot to enable use of guake as your favorite terminal, zsh as your master shell."

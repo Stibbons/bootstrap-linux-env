@@ -1,21 +1,37 @@
 #!/bin/bash
 
+PROJECT_DIR=$HOME/Projects
+
+if [[ -d $HOME/projects/dev-tools ]]; then
+    # Special env for work
+    PROJECT_DIR=$HOME/projects/dev-tools
+fi
+echo
 echo "Automated installation of a new Development environment"
 echo
 echo "Info:"
+echo "PROJECT_DIR=$PROJECT_DIR"
 cat /etc/lsb-release
 
+echo
 echo "Please type your 'sudo' password:"
 sudo /bin/true
 
-echo "apt..."
+echo
+echo "apt-get update/upgrade"
+sudo apt-get update -y || exit 1
+sudo apt-get upgrade -y || exit 1
+
+echo
+echo "Some apt..."
 sudo apt-get install -y vim gedit || exit 1
 sudo apt-get install -y git git-gui gitk tig || exit 1
 sudo apt-get install -y git chromium-browser || exit 1
 
+echo
 echo "Installing sublime"
 which subl
-if [[ $? == 1 ]]; then
+if [[ $? == 1 || $(subl --version) != "Sublime Text Build 3059" ]]; then
     (
         mkdir Downloads
         cd Downloads
@@ -23,7 +39,9 @@ if [[ $? == 1 ]]; then
         sudo dpkg -i sublime-text_build-3059_amd64.deb
     )
 fi
+subl --version
 
+echo
 echo "Retrieving my sublime configuration..."
 cd $HOME
 (
@@ -34,20 +52,24 @@ cd $HOME
         firefox https://sublime.wbond.net/installation &
         subl &
     else
+        echo "Updating..."
         git fetch --all
     fi
 )
 
+echo
 echo "Retrieving my sublime configuration..."
 (
     source /etc/lsb-release
 
     exit 0 # this just leave the current '(...)' block
 
+    # Work around GNUTLS bug in Ubuntu 13.10
+    # http://stackoverflow.com/questions/13524242/error-gnutls-handshake-failed-git-repository
     if [[ DISTRIB_DESCRIPTION == "Ubuntu 13.10" ]]; then
         sudo apt-get install -y build-essential fakeroot dpkg-dev
-        mkdir $HOME/Projects/python-pycurl-openssl
-        cd $HOME/Projects/python-pycurl-openssl
+        mkdir $PROJECT_DIR/python-pycurl-openssl
+        cd $PROJECT_DIR/python-pycurl-openssl
         sudo apt-get source -y python-pycurl
         sudo apt-get build-dep -y python-pycurl
         sudo apt-get install -y libcurl4-openssl-dev
@@ -67,14 +89,16 @@ echo "Retrieving my sublime configuration..."
     fi
 )
 
+echo
 echo "Installing oh-my-zsh..."
 (
-    mkdir -p Projects/oh-my-zsh
-    cd Projects/oh-my-zsh
+    mkdir -p $PROJECT_DIR/oh-my-zsh
+    cd $PROJECT_DIR/oh-my-zsh
     if [[ ! -d .git ]]; then
         git clone https://Stibbons@github.com/Stibbons/oh-my-zsh.git .
 
     else
+        echo "Updating..."
         git fetch --all
     fi
     git remote add bchretien       https://github.com/bchretien/oh-my-zsh.git
@@ -88,20 +112,25 @@ echo "Installing oh-my-zsh..."
     git remote add styx            https://github.com/styx/oh-my-zsh.git
     git remote add upstream        https://github.com/robbyrussell/oh-my-zsh.git
     git remote add ysmood          https://github.com/ysmood/oh-my-zsh.git
-    ln -sf $HOME/Projects/oh-my-zsh $HOME/.oh-my-zsh
-    ln -sf Projects/oh-my-zsh/dot_files/gitconfig $HOME/.gitconfig
-    ln -sf $HOME/Projects/oh-my-zsh/templates/zshrc-linux.zsh $HOME/.zshrc
+    ln -sf $PROJECT_DIR/oh-my-zsh $HOME/.oh-my-zsh
+    if [[ ! -f $HOME/.gitconfig ]]; then
+        ln -sf Projects/oh-my-zsh/dot_files/gitconfig $HOME/.gitconfig
+    fi
+    ln -sf $PROJECT_DIR/oh-my-zsh/templates/zshrc-linux.zsh $HOME/.zshrc
 )
 
+echo
 echo "Installing zsh"
 sudo apt-get install -y zsh-beta || exit 1
+sudo apt-get autoremove -y || exit 1
 # password asked here
 chsh -s /bin/zsh
 
+echo
 echo "Installing guake..."
 (
-    mkdir -p Projects/guake
-    cd Projects/guake
+    mkdir -p $PROJECT_DIR/guake
+    cd $PROJECT_DIR/guake
     sudo apt-get install -y build-essential python autoconf
     sudo apt-get install -y gnome-common gtk-doc-tools libglib2.0-dev libgtk2.0-dev libgconf2-dev
     sudo apt-get install -y python-gtk2 python-gtk2-dev python-vte python-appindicator
@@ -114,9 +143,14 @@ echo "Installing guake..."
         make
         sudo make install
     else
+        echo "Updating..."
         git fetch --all
+        make
+        sudo make install
     fi
     git remote add upstream https://Stibbons@github.com/Guake/guake.git
 )
 
-echo "Please Reboot"
+echo
+echo "Environment successfully installed or updated."
+echo "Please Reboot to enable use of guake as your favorite terminal, zsh as your master shell."

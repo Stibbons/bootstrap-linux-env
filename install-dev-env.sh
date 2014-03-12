@@ -63,14 +63,14 @@ sudo apt-get install -y git chromium-browser || exit 1
 echo
 echo "Retrieving bootstrap as a project to futur updates..."
 (
-    mkdir -p $PROJECT_DIR/bootstrap-linx-env
-    cd $PROJECT_DIR/bootstrap-linx-env
+    mkdir -p $PROJECT_DIR/bootstrap-linux-env
+    cd $PROJECT_DIR/bootstrap-linux-env
     if [[ ! -d .git ]]; then
         git clone https://Stibbons@github.com/Stibbons/bootstrap-linx-env.git .
 
     else
         echo "Updating..."
-        git fetch --all
+        git fetch --all | git rebase
     fi
 )
 
@@ -99,7 +99,7 @@ cd $HOME
         subl &
     else
         echo "Updating..."
-        git fetch --all
+        git fetch --all | git rebase
     fi
 )
 
@@ -113,7 +113,7 @@ echo "Installing oh-my-zsh..."
 
     else
         echo "Updating..."
-        git fetch --all
+        git fetch --all | git rebase
     fi
     git remote add bchretien       https://github.com/bchretien/oh-my-zsh.git
     git remote add bors-ltd        https://github.com/bors-ltd/oh-my-zsh.git
@@ -145,23 +145,21 @@ echo "Installing guake..."
 (
     mkdir -p $PROJECT_DIR/guake
     cd $PROJECT_DIR/guake
-    sudo apt-get install -y build-essential python autoconf
-    sudo apt-get install -y gnome-common gtk-doc-tools libglib2.0-dev libgtk2.0-dev libgconf2-dev
-    sudo apt-get install -y python-gtk2 python-gtk2-dev python-vte python-appindicator
-    sudo apt-get install -y python3-dev python-pip
-    sudo apt-get install -y glade-gtk2
+    sudo apt-get install -y build-essential python autoconf || exit 1
+    sudo apt-get install -y gnome-common gtk-doc-tools libglib2.0-dev libgtk2.0-dev libgconf2-dev || exit 1
+    sudo apt-get install -y python-gtk2 python-gtk2-dev python-vte python-appindicator || exit 1
+    sudo apt-get install -y python3-dev python-pip || exit 1
+    sudo apt-get install -y glade-gtk2 || exit 1
 
     if [[ ! -d .git ]]; then
         git clone https://Stibbons@github.com/Stibbons/guake.git .
         ./autogen.sh
-        make
-        sudo make install
     else
         echo "Updating..."
-        git fetch --all
-        make
-        sudo make install
+        git fetch --all | git rebase || exit 1
     fi
+    make || exit 1
+    sudo make install || exit 1
     git remote add upstream https://Stibbons@github.com/Guake/guake.git
 )
 

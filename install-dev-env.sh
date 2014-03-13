@@ -60,6 +60,15 @@ sudo apt-get install -y git chromium-browser || exit 1
     fi
 )
 
+(
+    source /etc/lsb-release
+
+    # Work around GNUTLS bug in Ubuntu 13.10
+    if [[ DISTRIB_DESCRIPTION == "Ubuntu 13.10" ]]; then
+        sudo apt-get install -y gnome-session-fallback
+    fi
+)
+
 echo
 echo "Retrieving bootstrap as a project to futur updates..."
 (

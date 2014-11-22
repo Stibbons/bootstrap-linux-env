@@ -96,7 +96,6 @@ if [[ $? == 1 || $(subl --version) != "Sublime Text Build $SUBL_VERSION" ]]; the
     )
 fi
 subl --version
-xdg-open https://sublime.wbond.net/installation
 
 echo
 echo "Retrieving my sublime configuration..."
@@ -109,7 +108,7 @@ cd $HOME
     cd .config/sublime-text-3/Packages/User/
     if [[ ! -d .git ]]; then
         git clone https://Stibbons@github.com/Stibbons/sublime-user-config.git .
-        firefox https://sublime.wbond.net/installation &
+        xdg-open https://sublime.wbond.net/installation &
         subl &
     else
         echo "Updating..."

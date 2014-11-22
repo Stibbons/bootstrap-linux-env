@@ -165,11 +165,12 @@ echo "Installing guake..."
 
     if [[ ! -d .git ]]; then
         git clone https://Stibbons@github.com/Stibbons/guake.git .
-        ./autogen.sh
     else
         echo "Updating..."
-        git fetch --all | git rebase || exit 1
+        git fetch --all | git pull --rebase || exit 1
     fi
+    git remote add upstream https://Stibbons@github.com/Guake/guake.git
+    ./autogen.sh
     make || exit 1
     sudo make install || exit 1
     git remote add upstream https://Stibbons@github.com/Guake/guake.git

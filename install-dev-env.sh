@@ -75,7 +75,7 @@ echo "Retrieving bootstrap as a project to futur updates..."
     mkdir -p $PROJECT_DIR/bootstrap-linux-env
     cd $PROJECT_DIR/bootstrap-linux-env
     if [[ ! -d .git ]]; then
-        git clone https://Stibbons@github.com/Stibbons/bootstrap-linx-env.git .
+        git clone https://Stibbons@github.com/Stibbons/bootstrap-linux-env.git .
 
     else
         echo "Updating..."
@@ -170,6 +170,8 @@ echo "Installing guake..."
         git fetch --all | git pull --rebase || exit 1
     fi
     git remote add upstream https://Stibbons@github.com/Guake/guake.git
+    git fetch --all
+    
     ./autogen.sh
     make || exit 1
     sudo make install || exit 1

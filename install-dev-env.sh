@@ -86,20 +86,25 @@ echo "Retrieving bootstrap as a project to futur updates..."
 echo
 echo "Installing sublime"
 which subl
-if [[ $? == 1 || $(subl --version) != "Sublime Text Build 3059" ]]; then
+SUBL_VERSION=3065
+if [[ $? == 1 || $(subl --version) != "Sublime Text Build $SUBL_VERSION" ]]; then
     (
         mkdir Downloads
         cd Downloads
-        wget http://c758482.r82.cf2.rackcdn.com/sublime-text_build-3059_amd64.deb || exit 1
-        sudo dpkg -i sublime-text_build-3059_amd64.deb
+        wget http://c758482.r82.cf2.rackcdn.com/sublime-text_build-${SUBL_VERSION}_amd64.deb || exit 1
+        sudo dpkg -i sublime-text_build-${SUBL_VERSION}_amd64.deb
     )
 fi
 subl --version
+xdg-open https://sublime.wbond.net/installation
 
 echo
 echo "Retrieving my sublime configuration..."
 cd $HOME
 (
+    if [[ -d .config/sublime-text-3/Packages/User ]]; then
+        rm -rfv .config/sublime-text-3/Packages/User
+    fi
     mkdir -p .config/sublime-text-3/Packages/User
     cd .config/sublime-text-3/Packages/User/
     if [[ ! -d .git ]]; then
@@ -119,7 +124,6 @@ echo "Installing oh-my-zsh..."
     cd $PROJECT_DIR/oh-my-zsh
     if [[ ! -d .git ]]; then
         git clone https://Stibbons@github.com/Stibbons/oh-my-zsh.git .
-
     else
         echo "Updating..."
         git fetch --all | git rebase

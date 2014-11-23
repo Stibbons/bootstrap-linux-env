@@ -106,6 +106,9 @@ cd $HOME
     fi
     mkdir -p .config/sublime-text-3/Packages/User
     cd .config/sublime-text-3/Packages/User/
+    if [[ ! -f $PROJECT_DIR/sublime-config ]]; then
+        ln -sf ~/.config/sublime-text-3/Packages/User $PROJECT_DIR/sublime-config
+    fi
     if [[ ! -d .git ]]; then
         git clone https://Stibbons@github.com/Stibbons/sublime-user-config.git .
         xdg-open https://sublime.wbond.net/installation &

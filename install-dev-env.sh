@@ -174,7 +174,8 @@ echo "Installing guake..."
     fi
     git remote add upstream https://Stibbons@github.com/Guake/guake.git
     git fetch --all
-    
+    ln -s git-hooks/post-commit .git/hooks/
+
     ./autogen.sh
     make || exit 1
     sudo make install || exit 1

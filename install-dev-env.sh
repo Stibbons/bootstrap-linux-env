@@ -25,6 +25,7 @@ sudo apt-get upgrade -y || exit 1
 echo
 echo "Installing some tools..."
 sudo apt-get install -y vim gedit || exit 1
+sudo apt-get install -y htop || exit 1
 sudo apt-get install -y git git-gui gitk tig || exit 1
 sudo apt-get install -y git chromium-browser || exit 1
 

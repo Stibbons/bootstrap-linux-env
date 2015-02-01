@@ -107,7 +107,7 @@ cd $HOME
         rm -rfv .config/sublime-text-3/Packages/User
     fi
     mkdir -p .config/sublime-text-3/Packages/User
-    cd .config/sublime-text-3/Packages/User/
+    cd $HOME/.config/sublime-text-3/Packages/User/
     if [[ ! -f $PROJECT_DIR/sublime-config ]]; then
         ln -sf ~/.config/sublime-text-3/Packages/User $PROJECT_DIR/sublime-config
     fi
@@ -115,6 +115,22 @@ cd $HOME
         git clone https://Stibbons@github.com/Stibbons/sublime-user-config.git .
         xdg-open https://sublime.wbond.net/installation &
         subl &
+    else
+        echo "Updating..."
+        git fetch --all | git rebase
+    fi
+
+    echo "Installing my repo plugin..."
+    if [[ -d .config/sublime-text-3/Packages/sublime-repo ]]; then
+        rm -rfv .config/sublime-text-3/Packages/sublime-repo
+    fi
+    mkdir -p .config/sublime-text-3/Packages/sublime-repo
+    cd $HOME/.config/sublime-text-3/Packages/sublime-repo/
+    if [[ ! -f $PROJECT_DIR/sublime-repo ]]; then
+        ln -sf ~/.config/sublime-text-3/Packages/repo-config $PROJECT_DIR/sublime-repo
+    fi
+    if [[ ! -d .git ]]; then
+        git clone https://Stibbons@github.com/Stibbons/sublime-repo.git .
     else
         echo "Updating..."
         git fetch --all | git rebase

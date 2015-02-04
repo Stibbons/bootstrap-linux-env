@@ -99,6 +99,30 @@ if [[ $? == 1 || $(subl --version) != "Sublime Text Build $SUBL_VERSION" ]]; the
 fi
 subl --version
 
+function install_sublime_plugin()
+{
+    github_project=$1
+    shift
+    mount_point=$1
+    shift
+
+
+    if [[ -d .config/sublime-text-3/Packages/$mount_point ]]; then
+        rm -rfv .config/sublime-text-3/Packages/$mount_point
+    fi
+    mkdir -p .config/sublime-text-3/Packages/$mount_point
+    cd $HOME/.config/sublime-text-3/Packages/$mount_point/
+    if [[ ! -f $PROJECT_DIR/$mount_point ]]; then
+        ln -sf ~/.config/sublime-text-3/Packages/repo-config $PROJECT_DIR/$mount_point
+    fi
+    if [[ ! -d .git ]]; then
+        git clone https://Stibbons@github.com/Stibbons/$github_project.git .
+    else
+        echo "Updating..."
+        git fetch --all | git rebase
+    fi
+}
+
 echo
 echo "Retrieving my sublime configuration..."
 cd $HOME
@@ -119,22 +143,10 @@ cd $HOME
         echo "Updating..."
         git fetch --all | git rebase
     fi
-
-    echo "Installing my repo plugin..."
-    if [[ -d .config/sublime-text-3/Packages/sublime-repo ]]; then
-        rm -rfv .config/sublime-text-3/Packages/sublime-repo
-    fi
-    mkdir -p .config/sublime-text-3/Packages/sublime-repo
-    cd $HOME/.config/sublime-text-3/Packages/sublime-repo/
-    if [[ ! -f $PROJECT_DIR/sublime-repo ]]; then
-        ln -sf ~/.config/sublime-text-3/Packages/repo-config $PROJECT_DIR/sublime-repo
-    fi
-    if [[ ! -d .git ]]; then
-        git clone https://Stibbons@github.com/Stibbons/sublime-repo.git .
-    else
-        echo "Updating..."
-        git fetch --all | git rebase
-    fi
+    install_sublime_plugin 'sublime-repo' 'sublime-repo'
+    install_sublime_plugin 'FastSwitch' 'sublime-fastswitch'
+    install_sublime_plugin 'sublime-git-commands' 'sublime-git-commands'
+    install_sublime_plugin 'sublime-text-unit-test-runner' 'sublime-text-unit-test-runner'
 )
 
 echo

@@ -106,11 +106,12 @@ function install_sublime_plugin()
     mount_point=$1
     shift
 
-
     if [[ -d .config/sublime-text-3/Packages/$mount_point ]]; then
         rm -rfv .config/sublime-text-3/Packages/$mount_point
     fi
-    mkdir -p .config/sublime-text-3/Packages/$mount_point
+    cd $HOME
+
+    mkdir -p $HOME/.config/sublime-text-3/Packages/$mount_point
     cd $HOME/.config/sublime-text-3/Packages/$mount_point/
     if [[ ! -f $PROJECT_DIR/$mount_point ]]; then
         ln -sf ~/.config/sublime-text-3/Packages/repo-config $PROJECT_DIR/$mount_point
@@ -127,9 +128,9 @@ echo
 echo "Retrieving my sublime configuration..."
 cd $HOME
 (
-    if [[ -d .config/sublime-text-3/Packages/User ]]; then
-        rm -rfv .config/sublime-text-3/Packages/User
-    fi
+    # if [[ -d .config/sublime-text-3/Packages/User ]]; then
+    #     rm -rfv .config/sublime-text-3/Packages/User
+    # fi
     mkdir -p .config/sublime-text-3/Packages/User
     cd $HOME/.config/sublime-text-3/Packages/User/
     if [[ ! -f $PROJECT_DIR/sublime-config ]]; then

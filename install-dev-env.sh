@@ -125,6 +125,10 @@ function install_sublime_plugin()
 }
 
 echo
+echo "Installing codeintel"
+sudo -E pip install -U codeintel
+
+echo
 echo "Retrieving my sublime configuration..."
 cd $HOME
 (

@@ -88,7 +88,7 @@ echo "Retrieving bootstrap as a project to futur updates..."
 echo
 echo "Installing sublime"
 which subl
-SUBL_VERSION=3065
+SUBL_VERSION=3083
 if [[ $? == 1 || $(subl --version) != "Sublime Text Build $SUBL_VERSION" ]]; then
     (
         mkdir Downloads
@@ -226,6 +226,7 @@ echo "Installing guake..."
 
     echo
     echo "Installing pip tools..."
+    sudo pip install --upgrade pip || exit 1
     sudo pip install percol || exit 1
     sudo pip install grin || exit 1
     sudo pip install simplejson || exit 1

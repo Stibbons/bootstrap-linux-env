@@ -89,12 +89,22 @@ echo
 echo "Installing sublime"
 which subl
 SUBL_VERSION=3083
+MACHINE_TYPE=`uname -m`
+if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+  # 64-bit stuff here
+  SUBL_PLATFORM='amd64'
+else
+  # 32-bit stuff here
+  SUBL_PLATFORM='i386'
+fi
+SUBL_PLATFORM='i386'
 if [[ $? == 1 || $(subl --version) != "Sublime Text Build $SUBL_VERSION" ]]; then
     (
+        cd
         mkdir Downloads
         cd Downloads
-        wget http://c758482.r82.cf2.rackcdn.com/sublime-text_build-${SUBL_VERSION}_amd64.deb || exit 1
-        sudo -E dpkg -i sublime-text_build-${SUBL_VERSION}_amd64.deb
+        wget http://c758482.r82.cf2.rackcdn.com/sublime-text_build-${SUBL_VERSION}_${SUBL_PLATFORM}.deb || exit 1
+        sudo -E dpkg -i sublime-text_build-${SUBL_VERSION}_${SUBL_PLATFORM}.deb
     )
 fi
 subl --version

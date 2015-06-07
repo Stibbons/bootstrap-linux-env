@@ -199,9 +199,10 @@ sudo -E apt-get autoremove -y || exit 1
 # password asked here
 chsh -s /bin/zsh
 
-echo
-echo "Installing guake..."
 (
+    echo
+    echo "Installing guake..."
+
     mkdir -p $PROJECT_DIR/guake
     cd $PROJECT_DIR/guake
     sudo -E apt-get install -y build-essential python autoconf || exit 1
@@ -227,12 +228,12 @@ echo "Installing guake..."
     git remote add upstream https://Stibbons@github.com/Guake/guake.git
 )
 
-
 (
     echo
     echo "Installing python tools..."
     sudo -E apt-get install -y pyflakes || exit 1
     sudo -E apt-get install -y extract || exit 1
+    sudo -E apt-get install -y poedit || exit 1
 
     echo
     echo "Installing pip tools..."
@@ -253,6 +254,15 @@ echo "Installing guake..."
     sudo -E pip install ipdb || exit 1
     sudo -E pip install pep8 || exit 1
     sudo -E pip install autopep8 || exit 1
+)
+
+(
+    echo
+    echo "Installing npm..."
+    sudo -E apt-get install -y npm
+    sudo -E npm install -g bower
+    sudo -E npm install -g gulp
+    sudo -E npm install -g grunt
 )
 
 echo

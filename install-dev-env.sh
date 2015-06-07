@@ -97,7 +97,6 @@ else
   # 32-bit stuff here
   SUBL_PLATFORM='i386'
 fi
-SUBL_PLATFORM='i386'
 if [[ $? == 1 || $(subl --version) != "Sublime Text Build $SUBL_VERSION" ]]; then
     (
         cd
@@ -210,7 +209,7 @@ echo "Installing guake..."
     sudo -E apt-get install -y python-gtk2 python-gtk2-dev python-vte python-appindicator || exit 1
     sudo -E apt-get install -y python3-dev python-vte python-pip || exit 1
     sudo -E apt-get install -y python-gconf notify-osd libutempter0 || exit 1
-    sudo -E apt-get install -y glade-gtk2 python-notify || exit 1
+    sudo -E apt-get install -y glade-gtk2 python-notify python-keybinder || exit 1
 
     if [[ ! -d .git ]]; then
         git clone https://Stibbons@github.com/Stibbons/guake.git .

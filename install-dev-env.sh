@@ -229,6 +229,19 @@ chsh -s /bin/zsh
     make || exit 1
     sudo -E make install || exit 1
     git remote add upstream https://Stibbons@github.com/Guake/guake.git
+
+
+    mkdir -p $PROJECT_DIR/guake3
+    cd $PROJECT_DIR/guake3
+
+    if [[ ! -d .git ]]; then
+        git clone https://Stibbons@github.com/Stibbons/guake.git .
+    else
+        echo "Updating..."
+        git fetch --all | git pull --rebase || exit 1
+    fi
+    # git checkout -B guake3
+    git remote add upstream https://Stibbons@github.com/Guake/guake.git
 )
 
 (

@@ -93,7 +93,10 @@ MACHINE_TYPE=`uname -m`
 if [ ${MACHINE_TYPE} == 'x86_64' ]; then
   # 64-bit stuff here
   SUBL_PLATFORM='amd64'
+  SUBL_URL=https://download.sublimetext.com/sublime-text_build-3103_amd64.deb
+
 else
+  SUBL_URL=https://download.sublimetext.com/sublime-text_build-3103_i386.deb
   # 32-bit stuff here
   SUBL_PLATFORM='i386'
 fi
@@ -102,7 +105,7 @@ if [[ $? == 1 || $(subl --version) != "Sublime Text Build $SUBL_VERSION" ]]; the
         cd
         mkdir Downloads
         cd Downloads
-        wget http://c758482.r82.cf2.rackcdn.com/sublime-text_build-${SUBL_VERSION}_${SUBL_PLATFORM}.deb || exit 1
+        wget ${SUBL_URL} || exit 1
         sudo -E dpkg -i sublime-text_build-${SUBL_VERSION}_${SUBL_PLATFORM}.deb
     )
 fi
@@ -194,7 +197,7 @@ echo "Installing oh-my-zsh..."
 
 echo
 echo "Installing zsh"
-sudo -E apt-get install -y zsh-beta || exit 1
+sudo -E apt-get install -y zsh || exit 1
 sudo -E apt-get autoremove -y || exit 1
 # password asked here
 chsh -s /bin/zsh

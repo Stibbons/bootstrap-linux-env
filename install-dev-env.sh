@@ -235,13 +235,13 @@ chsh -s /bin/zsh
     cd $PROJECT_DIR/guake3
 
     if [[ ! -d .git ]]; then
-        git clone https://Stibbons@github.com/Stibbons/guake.git .
+        git clone -b guake3 https://Stibbons@github.com/Stibbons/guake.git .
     else
         echo "Updating..."
         git fetch --all | git pull --rebase || exit 1
     fi
-    # git checkout -B guake3
-    git remote add upstream https://Stibbons@github.com/Guake/guake.git
+    git remote add -m guake3 upstream https://Stibbons@github.com/Guake/guake.git
+    git fetch --all | git pull --rebase || exit 1
 )
 
 (

@@ -88,7 +88,7 @@ echo "Retrieving bootstrap as a project to futur updates..."
 echo
 echo "Installing sublime"
 which subl
-SUBL_VERSION=3103
+SUBL_VERSION=3126
 MACHINE_TYPE=`uname -m`
 if [ ${MACHINE_TYPE} == 'x86_64' ]; then
   # 64-bit stuff here

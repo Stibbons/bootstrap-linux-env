@@ -93,17 +93,17 @@ MACHINE_TYPE=`uname -m`
 if [ ${MACHINE_TYPE} == 'x86_64' ]; then
   # 64-bit stuff here
   SUBL_PLATFORM='amd64'
-  SUBL_URL=https://download.sublimetext.com/sublime-text_build-3103_amd64.deb
+  SUBL_URL=https://download.sublimetext.com/sublime-text_build-${SUBL_VERSION}_amd64.deb
 
 else
-  SUBL_URL=https://download.sublimetext.com/sublime-text_build-3103_i386.deb
+  SUBL_URL=https://download.sublimetext.com/sublime-text_build-${SUBL_VERSION}_i386.deb
   # 32-bit stuff here
   SUBL_PLATFORM='i386'
 fi
 if [[ $? == 1 || $(subl --version) != "Sublime Text Build $SUBL_VERSION" ]]; then
     (
         cd
-        mkdir Downloads
+        mkdir -p Downloads
         cd Downloads
         wget ${SUBL_URL} || exit 1
         sudo -E dpkg -i sublime-text_build-${SUBL_VERSION}_${SUBL_PLATFORM}.deb
@@ -179,7 +179,7 @@ echo "Installing oh-my-zsh..."
     fi
     git remote add bchretien       https://github.com/bchretien/oh-my-zsh.git
     git remote add bors-ltd        https://github.com/bors-ltd/oh-my-zsh.git
-    git remote add cadusk          https://github.com/cadusk/oh-my-zsh.git
+    git remote adfd cadusk          https://github.com/cadusk/oh-my-zsh.git
     git remote add dlintw          https://github.com/dlintw/oh-my-zsh.git
     git remote add jeroenjanssens  https://github.com/jeroenjanssens/oh-my-zsh.git
     git remote add kipanshi        https://github.com/kipanshi/oh-my-zsh.git

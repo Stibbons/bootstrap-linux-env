@@ -2,9 +2,9 @@
 
 PROJECT_DIR=$HOME/Projects
 
-if [[ -d $HOME/projects/dev-tools ]]; then
+if [[ -d $HOME/Projects/dev-tools ]]; then
     # Special env for work
-    PROJECT_DIR=$HOME/projects/dev-tools
+    PROJECT_DIR=$HOME/Projects/dev-tools
 fi
 echo
 echo "Automated installation of a new Development environment"
@@ -88,7 +88,7 @@ echo "Retrieving bootstrap as a project to futur updates..."
 echo
 echo "Installing sublime"
 which subl
-SUBL_VERSION=3126
+SUBL_VERSION=3143
 MACHINE_TYPE=`uname -m`
 if [ ${MACHINE_TYPE} == 'x86_64' ]; then
   # 64-bit stuff here
@@ -177,17 +177,8 @@ echo "Installing oh-my-zsh..."
         echo "Updating..."
         git fetch --all | git rebase
     fi
-    git remote add bchretien       https://github.com/bchretien/oh-my-zsh.git
-    git remote add bors-ltd        https://github.com/bors-ltd/oh-my-zsh.git
-    git remote adfd cadusk          https://github.com/cadusk/oh-my-zsh.git
-    git remote add dlintw          https://github.com/dlintw/oh-my-zsh.git
-    git remote add jeroenjanssens  https://github.com/jeroenjanssens/oh-my-zsh.git
-    git remote add kipanshi        https://github.com/kipanshi/oh-my-zsh.git
     git remote add origin          https://Stibbons@github.com/Stibbons/oh-my-zsh.git
-    git remote add sjl             https://github.com/sjl/oh-my-zsh.git
-    git remote add styx            https://github.com/styx/oh-my-zsh.git
     git remote add upstream        https://github.com/robbyrussell/oh-my-zsh.git
-    git remote add ysmood          https://github.com/ysmood/oh-my-zsh.git
     ln -sf $PROJECT_DIR/oh-my-zsh $HOME/.oh-my-zsh
     if [[ ! -f $HOME/.gitconfig ]]; then
         ln -sf Projects/oh-my-zsh/dot_files/gitconfig $HOME/.gitconfig

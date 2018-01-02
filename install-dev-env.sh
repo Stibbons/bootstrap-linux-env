@@ -28,7 +28,7 @@ sudo -E apt-get install -y vim gedit || exit 1
 sudo -E apt-get install -y htop || exit 1
 sudo -E apt-get install -y git git-gui gitk tig || exit 1
 sudo -E apt-get install -y git chromium-browser || exit 1
-sudo -E apt-get install -y git gconf-editor || exit 1
+sudo -E apt-get install -y git gconf-editor kdiff3 || exit 1
 
 (
     source /etc/lsb-release

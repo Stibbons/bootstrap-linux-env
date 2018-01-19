@@ -30,6 +30,11 @@ sudo -E apt-get install -y htop || exit 1
 sudo -E apt-get install -y git git-gui gitk tig || exit 1
 sudo -E apt-get install -y git chromium-browser || exit 1
 sudo -E apt-get install -y git gconf-editor kdiff3 || exit 1
+sudo -E apt-get install -y python3-pip || exit 1
+
+echo
+echo "Installing pip tools..."
+pip3 install --upgrade --user pip pipenv || exit 1
 
 (
     source /etc/lsb-release
@@ -139,7 +144,7 @@ function install_sublime_plugin()
 
 echo
 echo "Installing codeintel"
-sudo -E pip install -U codeintel
+pip3 install --user codeintel pipenv pbr
 
 echo
 echo "Retrieving my sublime configuration..."
@@ -200,12 +205,6 @@ chsh -s /bin/zsh
 
     mkdir -p $PROJECT_DIR/guake
     cd $PROJECT_DIR/guake
-    sudo -E apt-get install -y build-essential python autoconf || exit 1
-    sudo -E apt-get install -y gnome-common gtk-doc-tools libglib2.0-dev libgtk2.0-dev libgconf2-dev || exit 1
-    sudo -E apt-get install -y python-gtk2 python-gtk2-dev python-vte python-appindicator || exit 1
-    sudo -E apt-get install -y python3-dev python-vte python-pip || exit 1
-    sudo -E apt-get install -y python-gconf notify-osd libutempter0 || exit 1
-    sudo -E apt-get install -y glade-gtk2 python-notify python-keybinder || exit 1
 
     if [[ ! -d .git ]]; then
         git clone https://Stibbons@github.com/Stibbons/guake.git .
@@ -242,35 +241,17 @@ chsh -s /bin/zsh
     sudo -E apt-get install -y pyflakes || exit 1
     sudo -E apt-get install -y extract || exit 1
     sudo -E apt-get install -y poedit || exit 1
-
-    echo
-    echo "Installing pip tools..."
-    sudo -E pip install --upgrade pip || exit 1
-    sudo -E pip install percol || exit 1
-    sudo -E pip install grin || exit 1
-    sudo -E pip install simplejson || exit 1
-    sudo -E pip install pylint || exit 1
-    sudo -E pip install Twisted || exit 1
-    sudo -E pip install Mock || exit 1
-    sudo -E pip install simplejson || exit 1
-    sudo -E pip install pyyaml || exit 1
-    sudo -E pip install dictns || exit 1
-    sudo -E pip install Sphinx || exit 1
-    sudo -E pip install epydoc || exit 1
-    sudo -E pip install coverage || exit 1
-    sudo -E pip install pylint || exit 1
-    sudo -E pip install ipdb || exit 1
-    sudo -E pip install pep8 || exit 1
-    sudo -E pip install autopep8 || exit 1
 )
 
 (
     echo
     echo "Installing npm..."
     sudo -E apt-get install -y npm
-    sudo -E npm install -g bower
-    sudo -E npm install -g gulp
-    sudo -E npm install -g grunt
+    npm install npm
+    npm install bower
+    npm install gulp
+    npm install grunt
+    npm install yarn
 )
 
 echo

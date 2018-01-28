@@ -83,7 +83,7 @@ echo "Retrieving bootstrap as a project to futur updates..."
     mkdir -p $PROJECT_DIR/bootstrap-linux-env
     cd $PROJECT_DIR/bootstrap-linux-env
     if [[ ! -d .git ]]; then
-        git clone https://Stibbons@github.com/Stibbons/bootstrap-linux-env.git .
+        git clone https://gsemet@github.com/gsemet/bootstrap-linux-env.git .
 
     else
         echo "Updating..."
@@ -135,7 +135,7 @@ function install_sublime_plugin()
         ln -sf ~/.config/sublime-text-3/Packages/repo-config $PROJECT_DIR/$mount_point
     fi
     if [[ ! -d .git ]]; then
-        git clone https://Stibbons@github.com/Stibbons/$github_project.git .
+        git clone https://gsemet@github.com/gsemet/$github_project.git .
     else
         echo "Updating..."
         git fetch --all | git rebase
@@ -159,7 +159,7 @@ cd $HOME
         ln -sf ~/.config/sublime-text-3/Packages/User $PROJECT_DIR/sublime-config
     fi
     if [[ ! -d .git ]]; then
-        git clone https://Stibbons@github.com/Stibbons/sublime-user-config.git .
+        git clone https://gsemet@github.com/gsemet/sublime-user-config.git .
         xdg-open https://sublime.wbond.net/installation &
         subl &
     else
@@ -178,12 +178,12 @@ echo "Installing oh-my-zsh..."
     mkdir -p $PROJECT_DIR/oh-my-zsh
     cd $PROJECT_DIR/oh-my-zsh
     if [[ ! -d .git ]]; then
-        git clone https://Stibbons@github.com/Stibbons/oh-my-zsh.git .
+        git clone https://gsemet@github.com/gsemet/oh-my-zsh.git .
     else
         echo "Updating..."
         git fetch --all | git rebase
     fi
-    git remote add origin          https://Stibbons@github.com/Stibbons/oh-my-zsh.git
+    git remote add origin          https://gsemet@github.com/gsemet/oh-my-zsh.git
     git remote add upstream        https://github.com/robbyrussell/oh-my-zsh.git
     ln -sf $PROJECT_DIR/oh-my-zsh $HOME/.oh-my-zsh
     if [[ ! -f $HOME/.gitconfig ]]; then
@@ -207,31 +207,31 @@ chsh -s /bin/zsh
     cd $PROJECT_DIR/guake
 
     if [[ ! -d .git ]]; then
-        git clone https://Stibbons@github.com/Stibbons/guake.git .
+        git clone https://gsemet@github.com/gsemet/guake.git .
     else
         echo "Updating..."
         git fetch --all | git pull --rebase || exit 1
     fi
-    git remote add upstream https://Stibbons@github.com/Guake/guake.git
+    git remote add upstream https://gsemet@github.com/Guake/guake.git
     git fetch --all
     ln -s git-hooks/post-commit .git/hooks/
 
     ./autogen.sh
     make || exit 1
     sudo -E make install || exit 1
-    git remote add upstream https://Stibbons@github.com/Guake/guake.git
+    git remote add upstream https://gsemet@github.com/Guake/guake.git
 
 
     mkdir -p $PROJECT_DIR/guake3
     cd $PROJECT_DIR/guake3
 
     if [[ ! -d .git ]]; then
-        git clone -b guake3 https://Stibbons@github.com/Stibbons/guake.git .
+        git clone -b guake3 https://gsemet@github.com/gsemet/guake.git .
     else
         echo "Updating..."
         git fetch --all | git pull --rebase || exit 1
     fi
-    git remote add -m guake3 upstream https://Stibbons@github.com/Guake/guake.git
+    git remote add -m guake3 upstream https://gsemet@github.com/Guake/guake.git
     git fetch --all | git pull --rebase || exit 1
 )
 

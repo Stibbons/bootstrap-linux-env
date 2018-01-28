@@ -34,7 +34,7 @@ sudo -E apt-get install -y python3-pip || exit 1
 
 echo
 echo "Installing pip tools..."
-pip3 install --upgrade --user pip pipenv || exit 1
+pip3 install --upgrade --user pip pipenv grin3 || exit 1
 
 (
     source /etc/lsb-release

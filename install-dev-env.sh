@@ -11,6 +11,7 @@ echo "Automated installation of a new Development environment"
 echo
 echo "Info:"
 echo "PROJECT_DIR=$PROJECT_DIR"
+mkdir -p $PROJECT_DIR
 cat /etc/lsb-release
 
 echo
@@ -24,25 +25,54 @@ sudo -E apt-get upgrade -y || exit 1
 
 echo
 echo "Installing some tools..."
-sudo -E apt-get install -y vim gedit || exit 1
-sudo -E apt-get install -y exuberant-ctags pandoc || exit 1
-sudo -E apt-get install -y htop tmux iotop iftop atop || exit 1
-sudo -E apt-get install -y git git-gui gitk tig || exit 1
-sudo -E apt-get install -y git chromium-browser || exit 1
-sudo -E apt-get install -y git gconf-editor kdiff3 || exit 1
-sudo -E apt-get install -y python3-pip || exit 1
-sudo -E apt-get install -y nodejs-legacy npm || exit 1
+sudo -E apt-get install -y \
+    aspell-fr \
+    atop    \
+    chromium-browser      \
+    dconf-editor \
+    exuberant-ctags\
+    gconf-editor \
+    gedit      \
+    gettext \
+    gir1.2-keybinder-3.0 \
+    gir1.2-notify-0.7 \
+    gir1.2-vte-2.91 \
+    git \
+    git-gui \
+    gitk \
+    glade \
+    gnome-tweak-tool \
+    gsettings-desktop-schemas \
+    htop \
+    iftop \
+    iotop \
+    kdiff3   \
+    libkeybinder-3.0-0 \
+    libutempter0 \
+    make \
+    nodejs \
+    npm \
+    numix-gtk-theme \
+    pandoc \
+    python3 \
+    python3-cairo \
+    python3-dbus \
+    python3-gi \
+    python3-pbr \
+    python3-pip \
+    tig      \
+    tmux \
+    vim \
+    || exit 1
 sudo -E npm install gtop -g || exit 1
 
 
 echo
 echo "Installing pip tools..."
-pip3 install --upgrade --user pip pipenv grin3 || exit 1
+python3 -m pip install --upgrade --user pip pipenv grin3 pbr cookiecutter || exit 1
 
 (
     source /etc/lsb-release
-
-    exit 0 # this just leave the current '(...)' block
 
     # Work around GNUTLS bug in Ubuntu 13.10
     if [[ DISTRIB_DESCRIPTION == "Ubuntu 13.10" ]]; then
@@ -94,32 +124,33 @@ echo "Retrieving bootstrap as a project to futur updates..."
     fi
 )
 
-echo
-echo "Installing sublime"
-which subl
-SUBL_VERSION=3143
-MACHINE_TYPE=`uname -m`
-if [ ${MACHINE_TYPE} == 'x86_64' ]; then
-  # 64-bit stuff here
-  SUBL_PLATFORM='amd64'
-  SUBL_URL=https://download.sublimetext.com/sublime-text_build-${SUBL_VERSION}_amd64.deb
+(
+    echo
+    echo "Installing sublime"
+    which subl
+    SUBL_VERSION=3176
+    MACHINE_TYPE=`uname -m`
+    if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+    # 64-bit stuff here
+    SUBL_PLATFORM='amd64'
+    SUBL_URL=https://download.sublimetext.com/sublime-text_build-${SUBL_VERSION}_amd64.deb
 
-else
-  SUBL_URL=https://download.sublimetext.com/sublime-text_build-${SUBL_VERSION}_i386.deb
-  # 32-bit stuff here
-  SUBL_PLATFORM='i386'
-fi
-if [[ $? == 1 || $(subl --version) != "Sublime Text Build $SUBL_VERSION" ]]; then
-    (
-        cd
-        mkdir -p Downloads
-        cd Downloads
-        wget ${SUBL_URL} || exit 1
-        sudo -E dpkg -i sublime-text_build-${SUBL_VERSION}_${SUBL_PLATFORM}.deb
-    )
-fi
-subl --version
-
+    else
+    SUBL_URL=https://download.sublimetext.com/sublime-text_build-${SUBL_VERSION}_i386.deb
+    # 32-bit stuff here
+    SUBL_PLATFORM='i386'
+    fi
+    if [[ $? == 1 || $(subl --version) != "Sublime Text Build $SUBL_VERSION" ]]; then
+        (
+            cd
+            mkdir -p Downloads
+            cd Downloads
+            wget ${SUBL_URL} || exit 1
+            sudo -E dpkg -i sublime-text_build-${SUBL_VERSION}_${SUBL_PLATFORM}.deb
+        )
+    fi
+    subl --version
+)
 function install_sublime_plugin()
 {
     github_project=$1
@@ -144,10 +175,6 @@ function install_sublime_plugin()
         git fetch --all | git rebase
     fi
 }
-
-echo
-echo "Installing codeintel"
-pip3 install --user codeintel pipenv pbr
 
 echo
 echo "Retrieving my sublime configuration..."
@@ -195,10 +222,24 @@ echo "Installing oh-my-zsh..."
     ln -sf $PROJECT_DIR/oh-my-zsh/templates/zshrc-linux.zsh $HOME/.zshrc
 )
 
+(
+    echo
+    echo "Installing Visual Studio Code"
+    which code
+    if [[ $? == 1 || -z "$(code --version)" ]]; then
+        (
+            cd
+            mkdir -p Downloads
+            cd Downloads
+            wget https://go.microsoft.com/fwlink/?LinkID=760868 -O code_1.23.1-1525968403_amd64.deb || exit 1
+            sudo -E dpkg -i code_1.23.1-1525968403_amd64.deb
+        )
+    fi
+    subl --version
+)
 echo
 echo "Installing zsh"
 sudo -E apt-get install -y zsh || exit 1
-sudo -E apt-get autoremove -y || exit 1
 # password asked here
 chsh -s /bin/zsh
 
@@ -217,44 +258,32 @@ chsh -s /bin/zsh
     fi
     git remote add upstream https://gsemet@github.com/Guake/guake.git
     git fetch --all
-    ln -s git-hooks/post-commit .git/hooks/
-
-    ./autogen.sh
-    make || exit 1
-    sudo -E make install || exit 1
-    git remote add upstream https://gsemet@github.com/Guake/guake.git
-
-
-    mkdir -p $PROJECT_DIR/guake3
-    cd $PROJECT_DIR/guake3
-
-    if [[ ! -d .git ]]; then
-        git clone -b guake3 https://gsemet@github.com/gsemet/guake.git .
-    else
-        echo "Updating..."
-        git fetch --all | git pull --rebase || exit 1
-    fi
-    git remote add -m guake3 upstream https://gsemet@github.com/Guake/guake.git
-    git fetch --all | git pull --rebase || exit 1
+    
+    make reinstall || exit 1
 )
 
 (
     echo
     echo "Installing python tools..."
-    sudo -E apt-get install -y pyflakes || exit 1
-    sudo -E apt-get install -y extract || exit 1
-    sudo -E apt-get install -y poedit || exit 1
+    sudo -E apt-get install -y 
+        pyflakes \
+        extract \
+        poedit \
+
 )
 
+sudo -E apt-get autoremove -y || exit 1
 (
     echo
     echo "Installing npm..."
     sudo -E apt-get install -y npm
     npm install npm
-    npm install bower
-    npm install gulp
-    npm install grunt
-    npm install yarn
+    npm install \
+        bower \
+        gulp \
+        grunt \
+        yarn \
+
 )
 
 echo
